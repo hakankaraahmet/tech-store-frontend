@@ -1,3 +1,3 @@
 export default function Home() {
-  return <main>Tech Store</main>;
+  return <main className="4xl:text-red-500">Tech Store</main>;
 }
