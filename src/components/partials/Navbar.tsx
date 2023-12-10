@@ -40,11 +40,21 @@ const Navbar = () => {
     setSelectedIndex(-1);
   };
 
+  //Moving in Search results
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "ArrowDown" && selectedIndex < searchResults.length - 1) {
       setSelectedIndex((prevIndex) => prevIndex + 1);
     } else if (e.key === "ArrowUp" && selectedIndex > 0) {
       setSelectedIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
+  //Submitting Search
+  const handleSubmit = (e: React.FormEvent) => {
+    if (selectedIndex === -1) {
+      e.preventDefault();
+      router.push(`/${searchTerm}`);
+      setSearchTerm(searchTerm);
     }
   };
 
@@ -80,8 +90,7 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="dark:text-white w-1/3 relative ">
-          {/* ---------------------------------------------------------------- */}
-          <form className="relative">
+          <form className="relative" onSubmit={handleSubmit}>
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <IoSearch className="text-primary-800  text-2xl" />
             </div>
@@ -102,27 +111,23 @@ const Navbar = () => {
                 <span className="font-bold dark:font-bold">"{searchTerm}"</span>
               </Typography>
               {searchResults.map((result, index) => (
-                <Link
-                  href={"/asd"}
+                <button
                   key={result.id}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSearchTerm(result.name);
-                      router.push('/asd')
-                    }
+                  onClick={() => {
+                    setSearchTerm(result.name);
+                    router.push(`/${result.name}`);
                   }}
-                  role="button"
-                  onClick={() => setSearchTerm(result.name)}
-                  className={`cursor-pointer text-primary-800 dark:text-secondary-400 ${
-                    index === selectedIndex ? "bg-primary-500 " : ""
+                  className={`cursor-pointer text-left ps-2 p-2 text-primary-800 dark:text-secondary-400 ${
+                    index === selectedIndex
+                      ? "bg-primary-500 rounded-2xl text-secondary-400 "
+                      : ""
                   }`}
                 >
                   {result.name}
-                </Link>
+                </button>
               ))}
             </div>
           )}
-          {/* ---------------------------------------------------------------- */}
         </div>
         <div className="flex gap-x-8">
           <Switcher
