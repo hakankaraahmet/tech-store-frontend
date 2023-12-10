@@ -7,6 +7,7 @@ import { LuUser } from "react-icons/lu";
 import { BsBasket3 } from "react-icons/bs";
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdNightlightRound } from "react-icons/md";
+import { IoSearch } from "react-icons/io5";
 
 const Navbar = () => {
   const [theme, setTheme] = useState<string>("light");
@@ -27,12 +28,12 @@ const Navbar = () => {
       return newTheme;
     });
   };
-  
-  console.log(theme)
+
+  console.log(theme);
   return (
     <nav className="border border-red-500  mb-8">
-      <div className="flex justify-between border-2 border-black py-12 px-12 bg-primary-800">
-        <div className="border-2 border-green-500">
+      <div className="flex justify-between items-center border-2 border-black py-8 px-12 bg-primary-800">
+        <div>
           {" "}
           <h1 className="text-secondary-400 font-bold text-3xl tracking-wider">
             {" "}
@@ -40,7 +41,21 @@ const Navbar = () => {
             <span className="text-tertiary">Store</span>
           </h1>{" "}
         </div>
-        <div className="border-2 border-green-500 dark:text-white">middle</div>
+        <div className="dark:text-white w-1/3 ">
+          {/* ---------------------------------------------------------------- */}
+          <form className="relative">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <IoSearch className="text-primary-800  text-2xl" />
+            </div>
+            <input
+              type="search"
+              className="block w-full  py-4  ps-10 pe-6 text-sm text-primary-800  rounded-full focus:outline-none"
+              placeholder="What are you looking for?"
+              required
+            />
+          </form>
+          {/* ---------------------------------------------------------------- */}
+        </div>
         <div className="flex gap-x-8">
           <Switcher
             leftIcon={

@@ -21,11 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={open_sans.className}>
+      <body className={ `bg-secondary-400 dark:bg-primary-300 ${open_sans.className}`}>
         <Navbar />
-        <div>
         <Providers>{children}</Providers>
-        </div>
       </body>
     </html>
   );

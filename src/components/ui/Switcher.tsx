@@ -18,7 +18,7 @@ const Switcher = ({ leftIcon, rightIcon, onClick }: ISwitcher) => {
       }}
       className={`${
         position ? "bg-primary-800" : "bg-secondary-400"
-      } border-2 border-secondary-400  w-20 rounded-full relative cursor-pointer`}
+      } border-2 border-secondary-400  w-20 rounded-full relative h-8 cursor-pointer`}
     >
       <span
         className={`${
