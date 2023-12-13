@@ -51,10 +51,12 @@ const Navbar = () => {
 
   //Submitting Search
   const handleSubmit = (e: React.FormEvent) => {
-    if (selectedIndex === -1) {
-      e.preventDefault();
+    e.preventDefault();
+    if (selectedIndex !== -1) {
+      setSearchTerm(searchResults[selectedIndex].name);
+      router.push(`/${searchResults[selectedIndex].name}`);
+    } else {
       router.push(`/${searchTerm}`);
-      setSearchTerm(searchTerm);
     }
   };
 
@@ -69,9 +71,7 @@ const Navbar = () => {
 
   const handleDarkMode = () => {
     setTheme((prevTheme) => {
-      console.log("Previous Theme:", prevTheme);
       const newTheme = prevTheme === "dark" ? "light" : "dark";
-      console.log("New Theme:", newTheme);
       return newTheme;
     });
   };
