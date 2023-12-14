@@ -6,6 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -24,8 +25,8 @@ const config: Config = {
           600: "#D3E0E8",
           700: "#CCDBE5",
           800: "#C6D7E2",
-        }
-        
+        },
+        tertiary: "#11D3CF",
       },
     },
     screens: {
@@ -33,9 +34,9 @@ const config: Config = {
       md: "768px",
       lg: "1024px",
       xl: "1280px",
-      '2xl': "1536px",
-      '3xl': "1900px",
-      '4xl': "3000px"
+      "2xl": "1536px",
+      "3xl": "1900px",
+      "4xl": "3000px",
     },
   },
   plugins: [],
