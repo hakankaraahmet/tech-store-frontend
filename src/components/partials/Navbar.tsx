@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Tooltip from "../ui/Tooltip";
 import Switcher from "../ui/Switcher";
 import { LuLogIn } from "react-icons/lu";
@@ -7,17 +7,14 @@ import { LuUser } from "react-icons/lu";
 import { BsBasket3 } from "react-icons/bs";
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdNightlightRound } from "react-icons/md";
-import { IoSearch } from "react-icons/io5";
-import Typography from "../ui/Typography";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import SearchBar from "../ui/SearchBar";
+import { GiHamburgerMenu } from "react-icons/gi";
+import Sidebar from "./Sidebar";
 
 const Navbar = () => {
-  const router = useRouter();
   const [theme, setTheme] = useState<string>("light");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [isSideBarOpen, setSideBarOpen] = useState<boolean>(false);
 
   //Searching (Dummy data will be changed with the exact data after connection of backend)
   interface SearchResult {
@@ -30,35 +27,6 @@ const Navbar = () => {
     { id: 2, name: "Jane Smith" },
     { id: 3, name: "Bob Johnson" },
   ];
-
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    const results = dummyData.filter((item) =>
-      item.name.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setSearchResults(results);
-    setSelectedIndex(-1);
-  };
-
-  //Moving in Search results
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "ArrowDown" && selectedIndex < searchResults.length - 1) {
-      setSelectedIndex((prevIndex) => prevIndex + 1);
-    } else if (e.key === "ArrowUp" && selectedIndex > 0) {
-      setSelectedIndex((prevIndex) => prevIndex - 1);
-    }
-  };
-
-  //Submitting Search
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedIndex !== -1) {
-      setSearchTerm(searchResults[selectedIndex].name);
-      router.push(`/${searchResults[selectedIndex].name}`);
-    } else {
-      router.push(`/${searchTerm}`);
-    }
-  };
 
   //Dark Mode
   useEffect(() => {
@@ -75,11 +43,11 @@ const Navbar = () => {
       return newTheme;
     });
   };
-
+  console.log("isSideBarOpen :>> ", isSideBarOpen);
   return (
-    <nav className="border border-red-500  mb-8">
-      <div className="flex justify-between items-center border-2 border-black py-8 px-12 bg-primary-800">
-        <div>
+    <nav className="mb-8">
+      <div className="grid grid-cols-2 lg:flex  justify-between items-center  py-8 px-12 bg-primary-800">
+        <div className="order-1 w-fit">
           {" "}
           <Link href={"/"}>
             <h1 className="text-secondary-400 font-bold text-3xl tracking-wider">
@@ -89,47 +57,10 @@ const Navbar = () => {
             </h1>{" "}
           </Link>
         </div>
-        <div className="dark:text-white w-1/3 relative ">
-          <form className="relative" onSubmit={handleSubmit}>
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <IoSearch className="text-primary-800  text-2xl" />
-            </div>
-            <input
-              type="search"
-              className="block w-full  py-4  ps-10 pe-6 text-sm text-primary-800  rounded-full focus:outline-none"
-              placeholder="What are you looking for?"
-              value={searchTerm}
-              onChange={handleSearch}
-              onKeyDown={handleKeyDown}
-              required
-            />
-          </form>
-          {searchTerm && (
-            <div className="absolute flex flex-col gap-y-2 bg-secondary-300 dark:bg-primary-700 dark:border-secondary-300 top-16  border-2 border-primary-700 rounded-md p-2 w-full">
-              <Typography as="h3">
-                Search Results of{" "}
-                <span className="font-bold dark:font-bold">"{searchTerm}"</span>
-              </Typography>
-              {searchResults.map((result, index) => (
-                <button
-                  key={result.id}
-                  onClick={() => {
-                    setSearchTerm(result.name);
-                    router.push(`/${result.name}`);
-                  }}
-                  className={`cursor-pointer text-left ps-2 p-2 text-primary-800 dark:text-secondary-400 ${
-                    index === selectedIndex
-                      ? "bg-primary-500 rounded-2xl text-secondary-400 "
-                      : ""
-                  }`}
-                >
-                  {result.name}
-                </button>
-              ))}
-            </div>
-          )}
+        <div className="dark:text-white col-span-3 mt-8 lg:mt-0 w-full sm:w-3/4 mx-auto  lg:w-1/3 relative order-3 lg:order-2 ">
+          <SearchBar<SearchResult> data={dummyData} SearchResult={dummyData} />
         </div>
-        <div className="flex gap-x-8">
+        <div className="gap-x-8 order-2 lg:order-3 justify-end lg:justify-center hidden lg:flex">
           <Switcher
             leftIcon={
               <MdNightlightRound className="text-primary-800   text-lg" />
@@ -139,23 +70,49 @@ const Navbar = () => {
             }
             onClick={handleDarkMode}
           />
-          <div className="a">
+          <Link href="/">
             <Tooltip message="my basket">
               <BsBasket3 className="text-secondary-400 hover:text-tertiary cursor-pointer  text-3xl" />
             </Tooltip>
-          </div>
-          <div className="a">
+          </Link>
+          <Link href="/">
             <Tooltip message="my profile">
               <LuUser className="text-secondary-400 hover:text-tertiary cursor-pointer text-3xl" />
             </Tooltip>
-          </div>
-          <div className="a">
+          </Link>
+          <Link href="/">
             <Tooltip message="logout">
               <LuLogIn className="text-secondary-400 hover:text-tertiary cursor-pointer text-3xl" />
             </Tooltip>
-          </div>
+          </Link>
+        </div>
+        <div className="order-2 flex justify-end lg:hidden ">
+          <GiHamburgerMenu
+            onClick={() => setSideBarOpen(!isSideBarOpen)}
+            className="text-secondary-400 hover:text-tertiary cursor-pointer  text-3xl"
+          />
         </div>
       </div>
+
+      <div
+        className={` bg-secondary_color opacity-100  z-50  bg-secondary-500 dark:bg-primary-800
+          dark:text-secondary-400 text-primary-800  border-y-4 border-r-4 border-primary-800 
+          rounded-r-xl   transition-all duration-300  lg:hidden border-2  w-2/3  top-0 bottom-0  fixed ${
+            isSideBarOpen ? "translate-x-0 " : "-translate-x-full  "
+          } `}
+      >
+        <Sidebar
+          handleDarkMode={handleDarkMode}
+          isSideBarOpen
+          setSideBarOpen={setSideBarOpen}
+        />
+      </div>
+      <div
+        onClick={() => setSideBarOpen(false)}
+        className={`fixed   right-0 top-0 bottom-0  bg-black transition-all duration-300 opacity-50 ${
+          isSideBarOpen ? "w-1/2  " : "w-0  "
+        }`}
+      ></div>
     </nav>
   );
 };
