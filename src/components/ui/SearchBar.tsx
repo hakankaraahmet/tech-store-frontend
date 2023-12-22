@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import Typography from "./Typography";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,8 @@ const SearchBar = <T,>({ data, SearchResult }: ISearchBar<T>) => {
     []
   );
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const searchResultRef = useRef<HTMLInputElement>(null);
+  const [isInputActive, setIsInputActive] = useState<boolean>(false)
   const router = useRouter();
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +47,23 @@ const SearchBar = <T,>({ data, SearchResult }: ISearchBar<T>) => {
       router.push(`/${searchTerm}`);
     }
   };
+
+  // outside click of input search items
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (searchResultRef.current) {
+        if (!searchResultRef.current.contains(event.target) && !isInputActive) {
+          searchResultRef.current.style.visibility = "hidden";
+        }else{
+          searchResultRef.current.style.visibility = "visible";
+        }
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [searchResultRef, isInputActive]);
   return (
     <div>
       <form className="relative" onSubmit={handleSubmit}>
@@ -58,11 +77,16 @@ const SearchBar = <T,>({ data, SearchResult }: ISearchBar<T>) => {
           value={searchTerm}
           onChange={handleSearch}
           onKeyDown={handleKeyDown}
+          onFocus={() => setIsInputActive(true)}
+          onBlur={() => setIsInputActive(false)}
           required
         />
       </form>
       {searchTerm && (
-        <div className="absolute flex flex-col gap-y-2 bg-secondary-300 dark:bg-primary-700 dark:border-secondary-300 top-16  border-2 border-primary-700 rounded-md p-2 w-full">
+        <div
+          ref={searchResultRef}
+          className="absolute flex flex-col gap-y-2 bg-secondary-300 dark:bg-primary-700 dark:border-secondary-300 top-16  border-2 border-primary-700 rounded-md p-2 w-full"
+        >
           <Typography as="h3">
             Search Results of{" "}
             <span className="font-bold dark:font-bold">"{searchTerm}"</span>
