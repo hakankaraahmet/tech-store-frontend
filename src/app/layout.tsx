@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "@/lib/provider";
 import Navbar from "@/components/partials/Navbar";
+import Footer from "@/components/partials/Footer";
 
 const open_sans = Open_Sans({
   subsets: ["latin"],
@@ -21,9 +22,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={ `bg-secondary-400 dark:bg-primary-300 ${open_sans.className}`}>
+      <body
+        className={`flex flex-col bg-secondary-400  min-h-screen dark:bg-primary-300 ${open_sans.className}`}
+      >
         <Navbar />
         <Providers>{children}</Providers>
+        <Footer />
       </body>
     </html>
   );
