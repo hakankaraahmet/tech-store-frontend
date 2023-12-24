@@ -43,7 +43,6 @@ const Navbar = () => {
       return newTheme;
     });
   };
-  console.log("isSideBarOpen :>> ", isSideBarOpen);
   return (
     <nav className="mb-8">
       <div className="grid grid-cols-2 lg:flex  justify-between items-center  py-8 px-12 bg-primary-800">
@@ -103,7 +102,6 @@ const Navbar = () => {
       >
         <Sidebar
           handleDarkMode={handleDarkMode}
-          isSideBarOpen
           setSideBarOpen={setSideBarOpen}
         />
       </div>

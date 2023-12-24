@@ -7,13 +7,11 @@ import { LuLogIn, LuUser } from "react-icons/lu";
 import Typography from "../ui/Typography";
 
 interface ISideBar {
-  isSideBarOpen: boolean;
   setSideBarOpen: (value: boolean) => void;
   handleDarkMode: () => void;
 }
 
 const Sidebar = ({
-  isSideBarOpen,
   setSideBarOpen,
   handleDarkMode,
 }: ISideBar) => {
